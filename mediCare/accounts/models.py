@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser, AbstractBaseUser, BaseUserM
 # Create your models here.
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self, first_name, last_name, username, email, password=None):
+    def create_user(self,username, email, phone_number,password=None):
         if not email:
             raise ValueError('User must have an email address')
 
@@ -14,21 +14,19 @@ class MyAccountManager(BaseUserManager):
         user = self.model(
             email = self.normalize_email(email),
             username = username,
-            first_name = first_name,
-            last_name = last_name
+            phone_number = phone_number
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, first_name, last_name, username, email, password):
+    def create_superuser(self,username,phone_number, email, password):
         user = self.create_user(
             email = self.normalize_email(email),
             username = username,
             password = password,
-            first_name = first_name,
-            last_name = last_name
+            phone_number = phone_number
         )
 
         user.is_admin = True
@@ -39,12 +37,9 @@ class MyAccountManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
     email = models.CharField(max_length=100, unique=True)
-    
-    
+    phone_number = models.CharField(max_length=50)
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
@@ -53,7 +48,7 @@ class User(AbstractBaseUser):
     is_superadmin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['username','phone_number']
 
     objects = MyAccountManager()
 
