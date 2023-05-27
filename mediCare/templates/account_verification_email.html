@@ -1,6 +1,6 @@
 {% autoescape off %}
 
-Hii {{user.first_name}},
+Hii {{user.username}},
 
 Please click on below link to confirm your registration.
 http://127.0.0.1:8000/{% url 'activate' uidb64=uid token=token %}
