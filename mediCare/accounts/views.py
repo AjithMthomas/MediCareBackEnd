@@ -38,8 +38,8 @@ class UserRegistration(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             current_site = get_current_site(request)
-            # uid = urlsafe_base64_encode(force_bytes(user.pk))
-            # token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
             
             mail_subject = 'Please activate your account'
             
@@ -145,6 +145,7 @@ class ResetPasswordView(APIView):
             return Response({'message': 'Password changed successfully'})
         else:
             return HttpResponseRedirect('http://localhost:3000/ResetPassword')
+            
         
 
 
