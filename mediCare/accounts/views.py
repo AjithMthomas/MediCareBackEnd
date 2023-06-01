@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView
 
 from .serializers import UserSerializer
 from accounts.models import User
@@ -145,8 +146,28 @@ class ResetPasswordView(APIView):
             return Response({'message': 'Password changed successfully'})
         else:
             return HttpResponseRedirect('http://localhost:3000/ResetPassword')
-            
-        
+
+
+class UsersListView(ListAPIView):
+    serializer_class = UserSerializer
+    # get_queryset overridden to customize the queryset.
+    def get_queryset(self):
+        return User.objects.filter(is_admin=False, is_staff=False, is_superadmin=False)
+
+
+class BlockUser(APIView):
+    def get(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+            print(user,'user')
+            user.is_active = not user.is_active
+            user.save()
+            return Response({'msg': "Blocked successfully"})
+        except user.DoesNotExist:
+            return Response({'msg': "User not found"})
+        except Exception as e:
+            print('hi')
+            return Response({'msg': str(e)})
 
 
       
