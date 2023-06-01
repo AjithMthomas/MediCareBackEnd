@@ -46,7 +46,7 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='images/', null=True)
+    image = models.ImageField(upload_to='images/', null=True,)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','phone_number']

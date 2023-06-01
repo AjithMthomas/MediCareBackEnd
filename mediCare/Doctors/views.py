@@ -4,6 +4,8 @@ from accounts . serializers import UserSerializer
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from . serializer import Appointmentserializer
+from . models import Appointment
 
 # Create your views here.
 
@@ -28,3 +30,8 @@ class blockDoctors(APIView):
         except Exception as e:
             print(e)
             return Response({'msg': str(e)})
+
+class AppointmentListView(ListAPIView):
+    serializer_class = Appointmentserializer
+    def get_queryset(self):
+        return Appointment.objects.all()
