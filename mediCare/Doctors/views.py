@@ -4,8 +4,9 @@ from accounts . serializers import UserSerializer
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from . serializer import Appointmentserializer
-from . models import Appointment
+from . serializer import Appointmentserializer,DepartmentSerializers
+from . models import Appointment,Department
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
@@ -35,3 +36,18 @@ class AppointmentListView(ListAPIView):
     serializer_class = Appointmentserializer
     def get_queryset(self):
         return Appointment.objects.all()
+
+class DepartmentListView(ListAPIView):
+    serializer_class = DepartmentSerializers
+    def get_queryset(self):
+        return Department.objects.all()
+
+
+@api_view(['POST'])
+def createDepartment(request):
+    serializer = DepartmentSerializers(data=request.data)
+    print(serializer,'gshiguiuhsuidh')
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)

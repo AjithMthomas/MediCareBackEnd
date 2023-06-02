@@ -18,10 +18,10 @@ class Slots(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=50)
-    desciption = models.CharField(max_length=150)
+    description  = models.CharField(max_length=150)
     image = models.ImageField(upload_to='department/', null=True,)
 
-    
+
     def __str__(self):
         return self.name
 
