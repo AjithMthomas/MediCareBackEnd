@@ -2,20 +2,6 @@ from django.db import models
 from accounts.models import User
 
 # Create your models here.
-class TimeSlot(models.Model):
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    booked = models.BooleanField(default=False)
-
-
-class Slots(models.Model):
-    date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    status = models.BooleanField(default=True)
-    slot_duration  = models.IntegerField()
-    time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE)
-
 class Department(models.Model):
     name = models.CharField(max_length=50)
     description  = models.CharField(max_length=150)
@@ -32,12 +18,25 @@ class Doctors(models.Model):
     experience = models.IntegerField()
     fee =  models.DecimalField(max_digits=8 ,decimal_places=2)
     certificate = models.ImageField(upload_to='certificates/', null=True)
-    slot = models.ForeignKey(Slots,on_delete=models.CASCADE)
+    is_approved=models.BooleanField(default=False)
 
     def __str__(self) :
         return self.user.username
 
+class Slots(models.Model):
+    doctor = models. ForeignKey(Doctors,on_delete=models.CASCADE)
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    status = models.BooleanField(default=True)
+    slot_duration  = models.IntegerField()
 
+
+class TimeSlot(models.Model):
+    slot = models.ForeignKey(Slots,on_delete=models.CASCADE)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    booked = models.BooleanField(default=False)
 
 class Appointment(models.Model):
     patient = models.ForeignKey(User,on_delete=models.CASCADE,limit_choices_to={'is_active':True,'is_staff':False,'is_superadmin':False})
