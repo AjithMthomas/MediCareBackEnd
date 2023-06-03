@@ -3,31 +3,33 @@ from . models import TimeSlot,Slots,Department,Doctors,Appointment
 from accounts . serializers import UserSerializer
 
 
-class TimeslotSerializers(serializers.ModelSerializer):
-     class Meta:
-          model = TimeSlot
-          fields ='__all__'
-
-class SlotSerializers(serializers.ModelSerializer):
-     time_slot = TimeslotSerializers()
-     class Meta:
-          model = Slots
-          fields = "__all__"
-
-
 
 class DepartmentSerializers(serializers.ModelSerializer):
      class Meta:
           model = Department
           fields = '__all__'
 
+
 class DoctorsSerializers(serializers.ModelSerializer):
      user = UserSerializer()
      specialization = DepartmentSerializers()
-     slot = SlotSerializers()
      class Meta:
           model = Doctors
           fields = '__all__'
+
+class SlotSerializers(serializers.ModelSerializer):
+     doctor = DoctorsSerializers()
+     class Meta:
+          model = Slots
+          fields = "__all__"
+
+
+class TimeslotSerializers(serializers.ModelSerializer):
+     slot =  SlotSerializers()
+     class Meta:
+          model = TimeSlot
+          fields ='__all__'
+
 
 
 

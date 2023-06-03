@@ -9,5 +9,6 @@ urlpatterns = [
     path('blockDoctor/<int:id>/',views.blockDoctors.as_view(),name='blockDoctors'),
     path('appointments/',views.AppointmentListView.as_view(),name="appointments"),
     path('departments/',views.DepartmentListView.as_view(),name="departments"),
-    path('createDepartment/',views.createDepartment,name='createDepartment')
+    path('createDepartment/',views.createDepartment,name='createDepartment'),
+    path('createDoctors/',views.DoctorsCreateAPIView.as_view(), name='createDoctors'),
 ]
