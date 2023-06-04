@@ -17,6 +17,11 @@ class DoctorsSerializers(serializers.ModelSerializer):
           model = Doctors
           fields = '__all__'
 
+class PostDoctorSerializers(serializers.ModelSerializer):
+     class Meta:
+          model = Doctors
+          fields = '__all__'
+
 class SlotSerializers(serializers.ModelSerializer):
      doctor = DoctorsSerializers()
      class Meta:
@@ -40,7 +45,6 @@ class Appointmentserializer(serializers.ModelSerializer):
      class Meta:
           model = Appointment
           fields = '__all__'
-
 
 
 

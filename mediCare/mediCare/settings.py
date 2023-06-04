@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # apps
     'accounts',
     'Doctors',
+    'Admin',
 
     # restframewor,jwt,cors headers
     'rest_framework',

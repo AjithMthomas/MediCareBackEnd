@@ -4,7 +4,7 @@ from accounts . serializers import UserSerializer
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from . serializer import Appointmentserializer,DepartmentSerializers,DoctorsSerializers
+from . serializer import Appointmentserializer,DepartmentSerializers,DoctorsSerializers,PostDoctorSerializers
 from . models import Appointment,Department
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -53,10 +53,14 @@ def createDepartment(request):
     return Response(serializer.errors, status=400)
 
 
+
 class DoctorsCreateAPIView(APIView):
-    def post(self, request, format=None):
-        serializer = DoctorsSerializers(data=request.data)
+    def post(self, request):
+        print(request.data)
+        serializer = PostDoctorSerializers(data=request.data)
+        print(serializer.is_valid(),'guygguuyvuuuu')
+        print(serializer.errors,'jsoifjsdiofjiosjfsajfdji')
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response( status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

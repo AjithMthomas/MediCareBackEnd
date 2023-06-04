@@ -4,7 +4,7 @@ from accounts.models import User
 # Create your models here.
 class Department(models.Model):
     name = models.CharField(max_length=50)
-    description  = models.CharField(max_length=150)
+    description  = models.CharField(max_length=350)
     image = models.ImageField(upload_to='department/', null=True,)
 
 
@@ -12,12 +12,12 @@ class Department(models.Model):
         return self.name
 
 class Doctors(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_staff': True})
+    user = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_active':True,'is_staff':False,'is_superadmin':False})
     address = models.CharField(max_length=100)
     specialization = models.ForeignKey(Department,on_delete=models.CASCADE)
     experience = models.IntegerField()
     fee =  models.DecimalField(max_digits=8 ,decimal_places=2)
-    certificate = models.ImageField(upload_to='certificates/', null=True)
+    certificate = models.ImageField(upload_to='certificates/', null=True,)
     is_approved=models.BooleanField(default=False)
 
     def __str__(self) :
