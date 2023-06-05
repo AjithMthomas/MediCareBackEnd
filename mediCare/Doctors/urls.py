@@ -11,5 +11,5 @@ urlpatterns = [
     path('departments/',views.DepartmentListView.as_view(),name="departments"),
     path('createDepartment/',views.createDepartment,name='createDepartment'),
     path('createDoctors/',views.DoctorsCreateAPIView.as_view(), name='createDoctors'),
-    path('shedule/',views.ScheduleAppointmentView.as_view(),name='shedule')
+    path('shedule/',views.SlotCreateAPIView.as_view(),name='shedule')
 ]

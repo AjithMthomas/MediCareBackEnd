@@ -24,7 +24,7 @@ class Doctors(models.Model):
         return self.user.username
 
 class Slots(models.Model):
-    doctor = models. ForeignKey(Doctors,on_delete=models.CASCADE)
+    doctor = models. ForeignKey(User,on_delete=models.CASCADE ,limit_choices_to={'is_active':True,'is_staff':True,'is_superadmin':False} )
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()

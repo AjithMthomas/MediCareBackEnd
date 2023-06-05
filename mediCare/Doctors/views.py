@@ -4,10 +4,11 @@ from accounts . serializers import UserSerializer
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from . serializer import Appointmentserializer,DepartmentSerializers,PostDoctorSerializers
-from . models import Appointment,Department
+from . serializer import Appointmentserializer,DepartmentSerializers,PostDoctorSerializers,SlotSerializers,PostSlotSerializers
+from . models import Appointment,Department,TimeSlot
 from rest_framework.decorators import api_view
 from rest_framework import status
+from datetime import datetime, timedelta
 # Create your views here.
 
 
@@ -66,10 +67,51 @@ class DoctorsCreateAPIView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class ScheduleAppointmentView(APIView):
+# class ScheduleAppointmentView(APIView):
+#     def post(self, request):
+#         serializer = Appointmentserializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SlotCreateAPIView(APIView):
     def post(self, request):
-        serializer = Appointmentserializer(data=request.data)
+        serializer = PostSlotSerializers(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            slot = serializer.save()  # Save the slot object
+            start_datetime = datetime.combine(datetime.today(), slot.start_time)
+            end_datetime = datetime.combine(datetime.today(), slot.end_time)
+            slot_duration = slot.slot_duration
+            print(slot_duration)
+            duration = end_datetime - start_datetime  # Calculate the duration
+            print(duration)
+            time_duration = duration.total_seconds() / 60  # Convert duration to minutes
+            print(time_duration)
+            num_slots = int(time_duration / slot_duration)
+
+            print(num_slots, "num of slots")
+            for i in range(num_slots):
+                start_time = (start_datetime + timedelta(minutes=i * time_duration)).time()
+                print(start_time,'s')
+                end_time = (start_datetime + timedelta(minutes=(i + 1) * time_duration)).time()
+                print(start_time)
+                time_slot = TimeSlot.objects.create(slot=slot, start_time=start_time, end_time=end_time)
+                # You can set other fields for the time slot if needed
+                # time_slot.booked = False
+                time_slot.save()
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+    
+
+class AppointmentListAPIView(APIView):
+    def get(self, request):
+        appointments = Appointment.objects.all()
+        serializer = Appointmentserializer(appointments, many=True)
+        return Response(serializer.data)

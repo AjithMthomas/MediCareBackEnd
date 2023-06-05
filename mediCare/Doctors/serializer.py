@@ -23,14 +23,27 @@ class PostDoctorSerializers(serializers.ModelSerializer):
           fields = '__all__'
 
 class SlotSerializers(serializers.ModelSerializer):
-     doctor = DoctorsSerializers()
+     doctor = UserSerializer()
      class Meta:
           model = Slots
           fields = "__all__"
 
 
+class  PostSlotSerializers(serializers.ModelSerializer):
+     class Meta:
+          model = Slots
+          fields = "__all__"
+
+
+
 class TimeslotSerializers(serializers.ModelSerializer):
      slot =  SlotSerializers()
+     class Meta:
+          model = TimeSlot
+          fields ='__all__'
+
+
+class PostTimeslotSerializers(serializers.ModelSerializer):
      class Meta:
           model = TimeSlot
           fields ='__all__'
