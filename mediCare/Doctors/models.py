@@ -51,5 +51,6 @@ class Appointment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     slot = models.ForeignKey(Slots,on_delete=models.CASCADE)
 
-
+class Students(models.Model):
+    tecc = models.CharField(max_length=100)
     
