@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from . models import TimeSlot,Slots,Department,Doctors,Appointment
+from . models import Slots,Department,Doctors,Appointment
 from accounts . serializers import UserSerializer
 
 
@@ -33,21 +33,6 @@ class  PostSlotSerializers(serializers.ModelSerializer):
      class Meta:
           model = Slots
           fields = "__all__"
-
-
-
-class TimeslotSerializers(serializers.ModelSerializer):
-     slot =  SlotSerializers()
-     class Meta:
-          model = TimeSlot
-          fields ='__all__'
-
-
-class PostTimeslotSerializers(serializers.ModelSerializer):
-     class Meta:
-          model = TimeSlot
-          fields ='__all__'
-
 
 
 

@@ -1,14 +1,16 @@
 from django.shortcuts import render
 from accounts . models import User
 from accounts . serializers import UserSerializer
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from . serializer import Appointmentserializer,DepartmentSerializers,PostDoctorSerializers,SlotSerializers,PostSlotSerializers
-from . models import Appointment,Department,TimeSlot
+from . serializer import (Appointmentserializer,DepartmentSerializers,PostDoctorSerializers,SlotSerializers,
+PostSlotSerializers,DoctorsSerializers,)
+from . models import Appointment,Department
 from rest_framework.decorators import api_view
 from rest_framework import status
 from datetime import datetime, timedelta
+from . models import Doctors
 # Create your views here.
 
 
@@ -76,35 +78,20 @@ class DoctorsCreateAPIView(APIView):
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+from datetime import datetime, timedelta
+
 class SlotCreateAPIView(APIView):
     def post(self, request):
         serializer = PostSlotSerializers(data=request.data)
+        print(request.data)
+        print(serializer.is_valid())
+        print(serializer.errors)
         if serializer.is_valid():
-            slot = serializer.save()  # Save the slot object
-            start_datetime = datetime.combine(datetime.today(), slot.start_time)
-            end_datetime = datetime.combine(datetime.today(), slot.end_time)
-            slot_duration = slot.slot_duration
-            print(slot_duration)
-            duration = end_datetime - start_datetime  # Calculate the duration
-            print(duration)
-            time_duration = duration.total_seconds() / 60  # Convert duration to minutes
-            print(time_duration)
-            num_slots = int(time_duration / slot_duration)
-
-            print(num_slots, "num of slots")
-            for i in range(num_slots):
-                start_time = (start_datetime + timedelta(minutes=i * time_duration)).time()
-                print(start_time,'s')
-                end_time = (start_datetime + timedelta(minutes=(i + 1) * time_duration)).time()
-                print(start_time)
-                time_slot = TimeSlot.objects.create(slot=slot, start_time=start_time, end_time=end_time)
-                # You can set other fields for the time slot if needed
-                # time_slot.booked = False
-                time_slot.save()
-
+            serializer.save()  # Save the slot object  
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
@@ -115,3 +102,35 @@ class AppointmentListAPIView(APIView):
         appointments = Appointment.objects.all()
         serializer = Appointmentserializer(appointments, many=True)
         return Response(serializer.data)
+
+
+class viewDoctorRequestView(APIView):
+    def get(self, request, id):
+        try:
+            doctor = Doctors.objects.get(id=id)  #
+            serializer = PostDoctorSerializers(doctor, many=False)  # Pass many=False for a single object
+            return Response(serializer.data)
+        except Doctors.DoesNotExist:
+            return Response({'msg': 'Doctor not found'})
+        except Exception as e:
+            return Response({'msg': str(e)})
+
+
+class UsersDoctorsView(ListAPIView):
+    serializer_class = DoctorsSerializers
+    # queryset = Doctors.objects.filter(is_approved=True)
+    def get_queryset(self):
+        return Doctors.objects.filter(is_approved=True)
+    
+
+class getDoctorInHome(APIView):
+    def get(self,request,id):
+        try:
+            doctor = Doctors.objects.get(id=id)
+            serializer = DoctorsSerializers(doctor, many=False)
+            return Response(serializer.data)
+        except Doctors.DoesNotExist:
+            return Response({'msg': 'Doctor not found'})
+        except Exception as e:
+            return Response({'msg': str(e)})
+        

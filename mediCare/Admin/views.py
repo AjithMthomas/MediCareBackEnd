@@ -13,4 +13,5 @@ class DoctorsRequestsView(ListAPIView):
     serializer_class = DoctorsSerializers
     # get_queryset overridden to customize the queryset.
     def get_queryset(self):
-        return Doctors.objects.all()
+        return Doctors.objects.filter(is_approved=False)
+

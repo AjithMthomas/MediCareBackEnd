@@ -12,12 +12,12 @@ class Department(models.Model):
         return self.name
 
 class Doctors(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_active':True,'is_staff':False,'is_superadmin':False})
+    user = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_active':True})
     address = models.CharField(max_length=100)
     specialization = models.ForeignKey(Department,on_delete=models.CASCADE)
     experience = models.IntegerField()
     fee =  models.DecimalField(max_digits=8 ,decimal_places=2)
-    certificate = models.ImageField(upload_to='certificates/', null=True,)
+    certificate = models.ImageField(upload_to='certificates/')
     is_approved=models.BooleanField(default=False)
 
     def __str__(self) :
@@ -30,18 +30,17 @@ class Slots(models.Model):
     end_time = models.TimeField()
     status = models.BooleanField(default=True)
     slot_duration  = models.IntegerField()
+    
+    
 
 
-class TimeSlot(models.Model):
-    slot = models.ForeignKey(Slots,on_delete=models.CASCADE)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    booked = models.BooleanField(default=False)
+
 
 class Appointment(models.Model):
     patient = models.ForeignKey(User,on_delete=models.CASCADE,limit_choices_to={'is_active':True,'is_staff':False,'is_superadmin':False})
-    doctor = models.ForeignKey(Doctors,on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctors,on_delete=models.CASCADE,limit_choices_to={'is_active':True,'is_staff':True,'is_superadmin':False})
     STATUS_CHOICES = (
+
         ('pending', 'Pending'),
         ('approved', 'Approved'),
         ('complete', 'Complete'),
