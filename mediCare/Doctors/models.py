@@ -12,7 +12,7 @@ class Department(models.Model):
         return self.name
 
 class Doctors(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_active':True})
+    user = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_active':True,'is_staff':True})
     address = models.CharField(max_length=100)
     specialization = models.ForeignKey(Department,on_delete=models.CASCADE)
     experience = models.IntegerField()
@@ -30,6 +30,7 @@ class Slots(models.Model):
     end_time = models.TimeField()
     status = models.BooleanField(default=True)
     slot_duration  = models.IntegerField()
+    is_booked = models.BooleanField(default=False)
     
     
 
@@ -51,6 +52,8 @@ class Appointment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     slot = models.ForeignKey(Slots,on_delete=models.CASCADE)
 
-class Students(models.Model):
-    tecc = models.CharField(max_length=100)
-    
+class Blogs(models.Model):
+    doctor = models.ForeignKey(Doctors,on_delete=models.CASCADE,limit_choices_to={'is_approved':True})
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=500)
+    image = models.ImageField(upload_to='blogs/')

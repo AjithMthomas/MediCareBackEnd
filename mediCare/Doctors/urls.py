@@ -13,5 +13,7 @@ urlpatterns = [
     path('viewDoctorRequest/<int:id>/', views.viewDoctorRequestView.as_view(), name='viewDoctorRequest'),
     path('docorsInUserSide/',views.UsersDoctorsView.as_view(),name='docorsInUserSide'),
     path('getDoctorInHome/<int:id>/',views.getDoctorInHome.as_view(),name='getDoctorInHome'),
+    path('getSlotsInHome/<int:id>/',views.GetSlotsInHome.as_view(),name='getSlotsInHome'),
+    path('create-blogs/',views.CreateBlogAPIView.as_view(),name='create-blogs')
 
 ]
