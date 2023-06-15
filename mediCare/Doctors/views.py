@@ -9,7 +9,7 @@ PostSlotSerializers,DoctorsSerializers,Blogsserializer,PostBlogserializer)
 from . models import Appointment,Department
 from rest_framework.decorators import api_view
 from rest_framework import status
-from . models import Doctors,Slots
+from . models import Doctors,Slots,Blogs
 import datetime
 
 # Create your views here.
@@ -84,8 +84,11 @@ class DoctorsCreateAPIView(APIView):
 class SlotCreateAPIView(APIView):
     def post(self, request):
         serializer = PostSlotSerializers(data=request.data)
+        print(serializer.is_valid())
+        print(serializer.errors)
         if serializer.is_valid():
             doctor = serializer.validated_data['doctor']
+            print(doctor)
             date = serializer.validated_data['date']
             start_time = serializer.validated_data['start_time']
             end_time = serializer.validated_data['end_time']
@@ -143,7 +146,7 @@ class UsersDoctorsView(ListAPIView):
     
 
 class getDoctorInHome(APIView):
-    def get(self,request,id):
+    def get(self,request, id):
         try:
             doctor = Doctors.objects.get(id=id)
             serializer = DoctorsSerializers(doctor, many=False)
@@ -155,25 +158,33 @@ class getDoctorInHome(APIView):
 
 class GetSlotsInHome(APIView):
     def get(self,request,id):
-        try:
-            slot = Slots.objects.filter(doctor_id=id)
-            serializer = SlotSerializers(slot,many=True)
-            return Response(serializer.data)
-        except Slots.DoesNotExist:
-            return Response({'msg': 'slot not exits'})
-        except Exception as e:
-            return Response({'msg': str(e)})
+        print(id)
+        slot = Slots.objects.filter(doctor=id)
+        print(slot)
+        serializer = SlotSerializers(slot,many=True)
+
+        return Response(serializer.data)
+        
        
        
 class CreateBlogAPIView(APIView):
     def post(self,request):
         print(request.data)
-        serializer = Blogsserializer
+        serializer = PostBlogserializer(data=request.data)
+        print(serializer.is_valid())
+        print(serializer.errors)
         if serializer.is_valid():
             serializer.save()
             return Response( status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-       
 
+class GetBlogsInHome(APIView):
+    def get(self,request,id):
+        print(id)
+        slot = Blogs.objects.filter(doctor=id)
+        print(slot)
+        serializer = Blogsserializer(slot,many=True)
+        return Response(serializer.data)
+        
         
         

@@ -3,6 +3,7 @@ from . import views
 
 
 urlpatterns = [
+    # adminsid
     path('doctors/',views.doctorsListView.as_view(),name='doctorsList'),
     path('blockDoctor/<int:id>/',views.blockDoctors.as_view(),name='blockDoctors'),
     path('appointments/',views.AppointmentListView.as_view(),name="appointments"),
@@ -11,9 +12,14 @@ urlpatterns = [
     path('createDoctors/',views.DoctorsCreateAPIView.as_view(), name='createDoctors'),
     path('shedule/',views.SlotCreateAPIView.as_view(),name='shedule'),
     path('viewDoctorRequest/<int:id>/', views.viewDoctorRequestView.as_view(), name='viewDoctorRequest'),
+
+    # userside
     path('docorsInUserSide/',views.UsersDoctorsView.as_view(),name='docorsInUserSide'),
     path('getDoctorInHome/<int:id>/',views.getDoctorInHome.as_view(),name='getDoctorInHome'),
     path('getSlotsInHome/<int:id>/',views.GetSlotsInHome.as_view(),name='getSlotsInHome'),
-    path('create-blogs/',views.CreateBlogAPIView.as_view(),name='create-blogs')
+
+    # doctor dashboard
+    path('create-blogs/',views.CreateBlogAPIView.as_view(),name='create-blogs'),
+    path('GetBlogsInHome/<int:id>/',views.GetBlogsInHome.as_view(),name='GetBlogsInHome'),
 
 ]

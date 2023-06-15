@@ -45,7 +45,7 @@ class Appointmentserializer(serializers.ModelSerializer):
           fields = '__all__'
 
 class Blogsserializer(serializers.ModelSerializer):
-     doctors = DoctorsSerializers()
+     doctor = DoctorsSerializers()
      class Meta:
           model = Blogs
           fields ='__all__'
@@ -53,7 +53,7 @@ class Blogsserializer(serializers.ModelSerializer):
 class PostBlogserializer(serializers.ModelSerializer):
      class Meta:
           model = Blogs
-          field = '__all__'
+          fields = '__all__'
 
 
  

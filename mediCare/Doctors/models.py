@@ -24,7 +24,7 @@ class Doctors(models.Model):
         return self.user.username
 
 class Slots(models.Model):
-    doctor = models. ForeignKey(User,on_delete=models.CASCADE ,limit_choices_to={'is_active':True,'is_staff':True,'is_superadmin':False} )
+    doctor = models. ForeignKey(User,on_delete=models.CASCADE  )
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -32,6 +32,8 @@ class Slots(models.Model):
     slot_duration  = models.IntegerField()
     is_booked = models.BooleanField(default=False)
     
+    def __str__(self) :
+        return self.doctor.username
     
 
 
