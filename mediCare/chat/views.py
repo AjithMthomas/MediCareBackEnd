@@ -53,6 +53,7 @@ class MessageListView(APIView):
         print(serializer.errors)
         if serializer.is_valid():
             message = serializer.save(room=room)
+            print(message)
             return Response(MessageSerializer(message).data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -71,4 +72,3 @@ class MessageDetailView(APIView):
         serializer = MessageSerializer(message)
         return Response(serializer.data)
 
-    # Add logic for updating and deleting a message if needed

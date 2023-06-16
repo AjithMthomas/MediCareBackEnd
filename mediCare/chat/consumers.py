@@ -1,5 +1,6 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+from channels.generic.websocket import AsyncWebsocketConsumer
+from .models import Message
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -25,23 +26,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
         try:
             # Parse the incoming message as JSON
             data = json.loads(text_data)
-            message = data.get('message')
+            message = data.get('content')
             author = data.get('author')
             room_id = data.get('room_id')
 
             if not (message and author and room_id):
                 raise ValueError('Invalid message data')
 
-            # Save the message to the database or perform any desired actions
-            # ... (add code here to save the message to the database)
+            # Save the message to the database
+            new_message = Message.objects.create(
+                content=message,
+                author=author,
+                room_id=room_id
+            )
 
             # Broadcast the message to the room group
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'chat_message',
-                    'message': message,
-                    'author': author
+                    'message': new_message.content,
+                    'author': new_message.author
                 }
             )
 

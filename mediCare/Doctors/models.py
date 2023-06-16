@@ -12,7 +12,7 @@ class Department(models.Model):
         return self.name
 
 class Doctors(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_active':True,'is_staff':True})
+    user = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'is_active':True})
     address = models.CharField(max_length=100)
     specialization = models.ForeignKey(Department,on_delete=models.CASCADE)
     experience = models.IntegerField()
