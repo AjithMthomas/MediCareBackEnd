@@ -97,6 +97,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+
+
 class ForgotPasswordView(APIView):
      def post(self, request:Response):
         email = request.data['email']
@@ -137,7 +139,6 @@ class ResetPasswordView(APIView):
         password = request.data['password']
         user_data = request.data['storedData']
         user_id = user_data['user']
-       
        
         if password :
             user = User.objects.get(pk=user_id)
