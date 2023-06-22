@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'accounts',
     'Doctors',
     'Admin',
+    'payment',
 
     # restframewor,jwt,cors headers
     'rest_framework',
@@ -44,6 +45,9 @@ INSTALLED_APPS = [
   
 ]
 REST_FRAMEWORK = {
+     'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',

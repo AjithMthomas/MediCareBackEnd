@@ -9,4 +9,5 @@ urlpatterns = [
     path('api/', include('accounts.urls')),
     path('admins/', include('Admin.urls')),
     path('doctor/', include('Doctors.urls')),
+    path('razorpay/', include("payment.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

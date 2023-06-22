@@ -16,7 +16,7 @@ class Doctors(models.Model):
     address = models.CharField(max_length=100)
     specialization = models.ForeignKey(Department,on_delete=models.CASCADE)
     experience = models.IntegerField()
-    fee =  models.DecimalField(max_digits=8 ,decimal_places=2)
+    fee =  models.IntegerField()
     certificate = models.ImageField(upload_to='certificates/')
     is_approved=models.BooleanField(default=False)
 
@@ -49,10 +49,11 @@ class Appointment(models.Model):
         ('complete', 'Complete'),
     )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    conulting_fee = models. DecimalField(max_digits=8,decimal_places=2)
-    date = models.DateField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    # conulting_fee = models. DecimalField(max_digits=8,decimal_places=2)
+    # date = models.DateField()
+    # timestamp = models.DateTimeField(auto_now_add=True)
     slot = models.ForeignKey(Slots,on_delete=models.CASCADE)
+
 
 class Blogs(models.Model):
     doctor = models.ForeignKey(Doctors,on_delete=models.CASCADE,limit_choices_to={'is_approved':True})
