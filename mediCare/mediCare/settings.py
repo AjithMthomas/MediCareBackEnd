@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
   
 ]
+
 REST_FRAMEWORK = {
      'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
@@ -104,8 +105,8 @@ SIMPLE_JWT = {
 
 
 MIDDLEWARE = [
-    #cors headers
-    'corsheaders.middleware.CorsMiddleware',
+    # corsheaders
+      'corsheaders.middleware.CorsMiddleware',
     # ---------------------------------------------
 
     'django.middleware.security.SecurityMiddleware',
