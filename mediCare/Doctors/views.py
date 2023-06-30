@@ -4,9 +4,9 @@ from accounts . serializers import UserSerializer
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from . serializer import (Appointmentserializer,DepartmentSerializers,PostDoctorSerializers,SlotSerializers,
+from . serializer import (DepartmentSerializers,PostDoctorSerializers,SlotSerializers,
 PostSlotSerializers,DoctorsSerializers,Blogsserializer,PostBlogserializer)
-from . models import Appointment,Department
+from . models import Department
 from rest_framework.decorators import api_view
 from rest_framework import status
 from . models import Doctors,Slots,Blogs
@@ -36,10 +36,7 @@ class blockDoctors(APIView):
             print(e)
             return Response({'msg': str(e)})
 
-class AppointmentListView(ListAPIView):
-    serializer_class = Appointmentserializer
-    def get_queryset(self):
-        return Appointment.objects.all()
+
 
 class DepartmentListView(ListAPIView):
     serializer_class = DepartmentSerializers
