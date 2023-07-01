@@ -116,11 +116,11 @@ class SlotCreateAPIView(APIView):
 
     
 
-class AppointmentListAPIView(APIView):
-    def get(self, request):
-        appointments = Appointment.objects.all()
-        serializer = Appointmentserializer(appointments, many=True)
-        return Response(serializer.data)
+# class AppointmentListAPIView(APIView):
+#     def get(self, request):
+#         appointments = Appointment.objects.all()
+#         serializer = Appointmentserializer(appointments, many=True)
+#         return Response(serializer.data)
 
 
 class viewDoctorRequestView(APIView):
@@ -153,10 +153,26 @@ class getDoctorInHome(APIView):
         except Exception as e:
             return Response({'msg': str(e)})
 
+
+
+class getUser(APIView):
+    def get(self,request, id):
+        try:
+            user = User.objects.get(id=id)
+            serializer = UserSerializer(user, many=False)
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            return Response({'msg': 'Doctor not found'})
+        except Exception as e:
+            return Response({'msg': str(e)})
+
+
+
+
 class GetSlotsInHome(APIView):
     def get(self,request,id):
         print(id)
-        slot = Slots.objects.filter(doctor=id)
+        slot = Slots.objects.filter(doctor=id,is_booked=False)
         print(slot)
         serializer = SlotSerializers(slot,many=True)
 

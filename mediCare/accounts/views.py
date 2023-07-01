@@ -19,7 +19,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
-
+from payment . models import Appointment
+from payment .serializers import Appointmentserializer
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -169,6 +170,23 @@ class BlockUser(APIView):
         except Exception as e:
             print('hi')
             return Response({'msg': str(e)})
+        
 
+        
+
+class getSingleUser(APIView):
+    def get(self,request, id):
+        try:
+            user = User.objects.get(id=id)
+            serializer = UserSerializer(user, many=False)
+            appointment = Appointment.objects.filter(patient=id)
+            if appointment :
+                appointment_serializer = Appointmentserializer(appointment,many=True)
+                return Response({'appointment':appointment_serializer.data,'userDetails':serializer.data})
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            return Response({'msg': 'Doctor not found'})
+        except Exception as e:
+            return Response({'msg': str(e)})
 
       

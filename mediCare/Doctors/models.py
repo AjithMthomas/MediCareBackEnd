@@ -36,11 +36,6 @@ class Slots(models.Model):
         return self.doctor.username
     
 
-
-
-
-
-
 class Blogs(models.Model):
     doctor = models.ForeignKey(Doctors,on_delete=models.CASCADE,limit_choices_to={'is_approved':True})
     name = models.CharField(max_length=50)

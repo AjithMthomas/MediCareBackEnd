@@ -6,7 +6,6 @@ urlpatterns = [
     # adminsid
     path('doctors/',views.doctorsListView.as_view(),name='doctorsList'),
     path('blockDoctor/<int:id>/',views.blockDoctors.as_view(),name='blockDoctors'),
-    # path('appointments/',views.AppointmentListView.as_view(),name="appointments"),
     path('departments/',views.DepartmentListView.as_view(),name="departments"),
     path('createDepartment/',views.createDepartment,name='createDepartment'),
     path('createDoctors/',views.DoctorsCreateAPIView.as_view(), name='createDoctors'),
@@ -16,6 +15,7 @@ urlpatterns = [
     # userside
     path('docorsInUserSide/',views.UsersDoctorsView.as_view(),name='docorsInUserSide'),
     path('getDoctorInHome/<int:id>/',views.getDoctorInHome.as_view(),name='getDoctorInHome'),
+    path('get_user/<int:id>/',views.getUser.as_view(),name='getUser'),
     path('getSlotsInHome/<int:id>/',views.GetSlotsInHome.as_view(),name='getSlotsInHome'),
 
     # doctor dashboard
