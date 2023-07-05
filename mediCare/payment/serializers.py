@@ -1,18 +1,8 @@
 from rest_framework import serializers
 from accounts. serializers import UserSerializer
 from Doctors.serializer import DoctorsSerializers,SlotSerializers
-from . models import Appointment
+from . models import Appointment,Prescription
 
-
-from .models import Order
-
-# class OrderSerializer(serializers.ModelSerializer):
-#     order_date = serializers.DateTimeField(format="%d %B %Y %I:%M %p")
-
-#     class Meta:
-#         model = Order
-#         fields = '__all__'
-#         depth = 2
 
 
 class Appointmentserializer(serializers.ModelSerializer):
@@ -22,3 +12,16 @@ class Appointmentserializer(serializers.ModelSerializer):
      class Meta:
           model = Appointment
           fields = '__all__'
+
+
+class PrescriptionSerializer(serializers.ModelSerializer):
+    patient = UserSerializer()
+    doctor = DoctorsSerializers()
+    class Meta:
+        model = Prescription
+        fields = '__all__'
+
+class  PostPrescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Prescription
+        fields = '__all__'

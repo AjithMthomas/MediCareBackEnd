@@ -17,7 +17,7 @@ import datetime
 
 class doctorsListView(ListAPIView):
     serializer_class = UserSerializer
-    # get_queryset overridden to customize the queryset.
+
     def get_queryset(self):
         return User.objects.filter(is_admin=False, is_staff=True, is_superadmin=False)
 
@@ -68,15 +68,6 @@ class DoctorsCreateAPIView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-# class ScheduleAppointmentView(APIView):
-#     def post(self, request):
-#         serializer = Appointmentserializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 class SlotCreateAPIView(APIView):
     def post(self, request):
@@ -113,22 +104,12 @@ class SlotCreateAPIView(APIView):
 
 
 
-
-    
-
-# class AppointmentListAPIView(APIView):
-#     def get(self, request):
-#         appointments = Appointment.objects.all()
-#         serializer = Appointmentserializer(appointments, many=True)
-#         return Response(serializer.data)
-
-
 class viewDoctorRequestView(APIView):
     def get(self, request, id):
         try:
             doctor = Doctors.objects.get(id=id)  #
-            serializer = PostDoctorSerializers(doctor, many=False)  # Pass many=False for a single object
-            return Response(serializer.data)
+            serializer = PostDoctorSerializers(doctor, many=False)
+            return Response(serializer.data) 
         except Doctors.DoesNotExist:
             return Response({'msg': 'Doctor not found'})
         except Exception as e:
@@ -191,13 +172,34 @@ class CreateBlogAPIView(APIView):
             return Response( status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-class GetBlogsInHome(APIView):
+class GetDoctorsBlog(APIView):
     def get(self,request,id):
         print(id)
-        slot = Blogs.objects.filter(doctor=id)
-        print(slot)
-        serializer = Blogsserializer(slot,many=True)
+        blog = Blogs.objects.filter(doctor=id)
+        serializer = Blogsserializer(blog,many=True)
         return Response(serializer.data)
-        
-        
-        
+
+
+class GetSingleBlog(APIView):
+    def get(self,request,id):
+        blog = Blogs.objects.get(id=id)
+        serializer = Blogsserializer(blog,many=False)
+        return Response(serializer.data)
+
+
+
+class BLogsListView(ListAPIView):
+    serializer_class = Blogsserializer
+    def get_queryset(self):
+        return Blogs.objects.all()
+    
+
+class getSingleDocterAPIView(APIView):
+    def get(self, request,id):
+        try:
+            user=User.objects.get(id=id)
+            doctor = Doctors.objects.get(user=user)
+            serializer = DoctorsSerializers(doctor, many=False)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Doctors.DoesNotExist:
+            return Response("Docter not found", status=status.HTTP_404_NOT_FOUND)

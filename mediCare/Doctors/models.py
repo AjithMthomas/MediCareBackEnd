@@ -39,5 +39,8 @@ class Slots(models.Model):
 class Blogs(models.Model):
     doctor = models.ForeignKey(Doctors,on_delete=models.CASCADE,limit_choices_to={'is_approved':True})
     name = models.CharField(max_length=50)
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=10000)
     image = models.ImageField(upload_to='blogs/')
+
+    def __str__(self):
+        return self.doctor.user.username

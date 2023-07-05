@@ -12,14 +12,20 @@ urlpatterns = [
     path('shedule/',views.SlotCreateAPIView.as_view(),name='shedule'),
     path('viewDoctorRequest/<int:id>/', views.viewDoctorRequestView.as_view(), name='viewDoctorRequest'),
 
+
     # userside
     path('docorsInUserSide/',views.UsersDoctorsView.as_view(),name='docorsInUserSide'),
     path('getDoctorInHome/<int:id>/',views.getDoctorInHome.as_view(),name='getDoctorInHome'),
     path('get_user/<int:id>/',views.getUser.as_view(),name='getUser'),
     path('getSlotsInHome/<int:id>/',views.GetSlotsInHome.as_view(),name='getSlotsInHome'),
+    path('getDoctorsBlog/<int:id>/',views.GetDoctorsBlog.as_view(),name='getDoctorsBlog'),
+    path('blogsList/',views.BLogsListView.as_view(),name='blogsList'),
+    path('singleBlog/<int:id>/',views.GetSingleBlog.as_view(),name='singleBlog'),
 
     # doctor dashboard
     path('create-blogs/',views.CreateBlogAPIView.as_view(),name='create-blogs'),
-    path('GetBlogsInHome/<int:id>/',views.GetBlogsInHome.as_view(),name='GetBlogsInHome'),
+    path('getSingleDocter/<int:id>',views.getSingleDocterAPIView.as_view(),name='getSingleDocter')
+    
+    
 
 ]

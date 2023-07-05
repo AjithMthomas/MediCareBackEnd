@@ -6,13 +6,14 @@ from . models import Appointment
 from datetime import date
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
-from .models import Order,Appointment
-from .serializers import Appointmentserializer
+from .models import Prescription,Appointment
+from .serializers import Appointmentserializer,PrescriptionSerializer,PostPrescriptionSerializer
 from accounts.models import User
 from datetime import datetime
 from Doctors.models import Doctors,Slots
 from rest_framework import status
-
+from django.http import FileResponse
+from rest_framework.exceptions import NotFound
 
 
 class AppointmentListView(ListAPIView):
@@ -26,12 +27,55 @@ class AppointmentListView(ListAPIView):
 class DoctorAppointmentsAPIView(APIView):
     def get(self, request,id):
         try:
-            # doctor = Doctors.objects.filter(doctor=id)
-            appointments = Appointment.objects.filter(doctor=id)
+            current_user=User.objects.get(id=id)
+            doctor = Doctors.objects.get(user=current_user)
+            appointments = Appointment.objects.filter(doctor=doctor)
             serializer = Appointmentserializer(appointments, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Appointment.DoesNotExist:
             return Response("Appointments not found", status=status.HTTP_404_NOT_FOUND)
+
+
+
+@api_view(['PUT'])
+def update_appointment_status(request, appointment_id):
+    try:
+        appointment = Appointment.objects.get(id=appointment_id)
+    except Appointment.DoesNotExist:
+        return Response({"message": "Appointment not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    new_status = request.data.get('status')
+    if not new_status:
+        return Response({"message": "Status is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    appointment.status = new_status
+    appointment.save()
+
+    return Response({"message": "Appointment status updated successfully"})
+
+
+class PrescriptionCreateAPIView(APIView):
+    def post(self, request):
+        serializer = PostPrescriptionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    
+class GetUserPrescriptionAPIView(APIView):
+    def get(self,request,id):
+        try:
+            print(id)
+            prescription = Prescription.objects.filter(patient=id)
+            serializer = PrescriptionSerializer(prescription,many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Prescription.DoesNotExist:
+            return Response("Prescription not found", status=status.HTTP_404_NOT_FOUND)
+
+
+
 
 
 
@@ -40,15 +84,12 @@ class start_payment(APIView):
         
         amount = request.data['amount']
         current_user = request.data['user']
-        print(current_user,'ojsoigjsdgjsajjojijfsifas')
         user = User.objects.get(id=current_user)
 
         doc = request.data['doctor']
-        print(doc)
         doctor = Doctors.objects.get(id=doc)
 
         slot = request.data['slot']
-        print(slot)
         current_slot = Slots.objects.get(id=slot)
 
         PUBLIC_KEY = 'rzp_test_GrC2fomAR5BvCu'
