@@ -1,10 +1,10 @@
-#!D:\MEDIcare\backend\env\Scripts\python.exe
-# EASY-INSTALL-ENTRY-SCRIPT: 'autobahn==23.6.1','console_scripts','wamp'
+#!D:\MEDIcare\backend\MediCareBackEnd\env\Scripts\python.exe
+# EASY-INSTALL-ENTRY-SCRIPT: 'autobahn==23.6.2','console_scripts','wamp'
 import re
 import sys
 
 # for compatibility with easy_install; see #2198
-__requires__ = 'autobahn==23.6.1'
+__requires__ = 'autobahn==23.6.2'
 
 try:
     from importlib.metadata import distribution
@@ -30,4 +30,4 @@ globals().setdefault('load_entry_point', importlib_load_entry_point)
 
 if __name__ == '__main__':
     sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
-    sys.exit(load_entry_point('autobahn==23.6.1', 'console_scripts', 'wamp')())
+    sys.exit(load_entry_point('autobahn==23.6.2', 'console_scripts', 'wamp')())
