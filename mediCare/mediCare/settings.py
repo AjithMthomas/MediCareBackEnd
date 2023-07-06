@@ -216,7 +216,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-     "http://localhost:3001"
+     "http://localhost:3001",
+    "https://www.medicarehealth.site",
    
  ]
 CORS_ALLOW_ALL_HEADERS = True

@@ -14,6 +14,7 @@ from Doctors.models import Doctors,Slots
 from rest_framework import status
 from django.http import FileResponse
 from rest_framework.exceptions import NotFound
+from django.db.models import Q
 
 
 class AppointmentListView(ListAPIView):
@@ -73,7 +74,6 @@ class GetUserPrescriptionAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Prescription.DoesNotExist:
             return Response("Prescription not found", status=status.HTTP_404_NOT_FOUND)
-
 
 
 
@@ -173,3 +173,7 @@ class handle_payment_success(APIView):
         }
 
         return Response(res_data)
+    
+
+
+
