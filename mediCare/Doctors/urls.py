@@ -11,6 +11,8 @@ urlpatterns = [
     path('createDoctors/',views.DoctorsCreateAPIView.as_view(), name='createDoctors'),
     path('shedule/',views.SlotCreateAPIView.as_view(),name='shedule'),
     path('viewDoctorRequest/<int:id>/', views.viewDoctorRequestView.as_view(), name='viewDoctorRequest'),
+    path('EditDepartment/<int:pk>/',views.DepartmentUpdateAPIView.as_view(), name='department-update'),
+
 
 
     # userside
@@ -25,6 +27,7 @@ urlpatterns = [
     # doctor dashboard
     path('create-blogs/',views.CreateBlogAPIView.as_view(),name='create-blogs'),
     path('getSingleDocter/<int:id>',views.getSingleDocterAPIView.as_view(),name='getSingleDocter'),
+
     
 
     

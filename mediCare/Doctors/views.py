@@ -11,6 +11,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from . models import Doctors,Slots,Blogs
 import datetime
+from rest_framework import generics
 
 # Create your views here.
 
@@ -54,6 +55,10 @@ def createDepartment(request):
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
+
+class DepartmentUpdateAPIView(generics.UpdateAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializers
 
 
 class DoctorsCreateAPIView(APIView):
@@ -203,3 +208,6 @@ class getSingleDocterAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Doctors.DoesNotExist:
             return Response("Docter not found", status=status.HTTP_404_NOT_FOUND)
+
+
+
