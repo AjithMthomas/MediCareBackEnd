@@ -39,7 +39,7 @@ class DoctorAppointmentsAPIView(APIView):
 
 
 @api_view(['PUT'])
-def update_appointment_status(request, appointment_id):
+def Update_appointment_status(request, appointment_id):
     try:
         appointment = Appointment.objects.get(id=appointment_id)
     except Appointment.DoesNotExist:
@@ -79,7 +79,7 @@ class GetUserPrescriptionAPIView(APIView):
 
 
 
-class start_payment(APIView):
+class Start_payment(APIView):
     def post(self, request, format=None):
         
         amount = request.data['amount']
@@ -124,7 +124,7 @@ class start_payment(APIView):
 
 
 
-class handle_payment_success(APIView):
+class Handle_payment_success(APIView):
     def post(self, request, format=None):
         res = json.loads(request.data["response"])
         slot = request.data['slot']

@@ -1,28 +1,31 @@
 from django.shortcuts import render
-from accounts . models import User
-from accounts . serializers import UserSerializer
+
+import datetime
+
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from . serializer import (DepartmentSerializers,PostDoctorSerializers,SlotSerializers,
-PostSlotSerializers,DoctorsSerializers,Blogsserializer,PostBlogserializer)
-from . models import Department
 from rest_framework.decorators import api_view
 from rest_framework import status
-from . models import Doctors,Slots,Blogs
-import datetime
 from rest_framework import generics
 
+from . models import Department
+from . models import Doctors,Slots,Blogs
+from accounts . models import User
+from accounts . serializers import UserSerializer
+from . serializer import (DepartmentSerializers,PostDoctorSerializers,SlotSerializers,
+PostSlotSerializers,DoctorsSerializers,Blogsserializer,PostBlogserializer)
 # Create your views here.
 
-
-class doctorsListView(ListAPIView):
+# for geting all the doctor in the platform
+class DoctorsListView(ListAPIView):
     serializer_class = UserSerializer
-
     def get_queryset(self):
         return User.objects.filter(is_admin=False, is_staff=True, is_superadmin=False)
 
-class blockDoctors(APIView):
+
+# for blocking  a doctor in the platform
+class BlockDoctors(APIView):
     def get(self,request,id):
         print(id)
         try:
@@ -38,15 +41,16 @@ class blockDoctors(APIView):
             return Response({'msg': str(e)})
 
 
-
+# for getting all the doctors in the platform
 class DepartmentListView(ListAPIView):
     serializer_class = DepartmentSerializers
     def get_queryset(self):
         return Department.objects.all()
 
 
+# for creating  a new department
 @api_view(['POST'])
-def createDepartment(request):
+def CreateDepartment(request):
     serializer = DepartmentSerializers(data=request.data)
     print(serializer.is_valid())
     print(serializer.errors)
@@ -55,12 +59,12 @@ def createDepartment(request):
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
-
+# for updating a deapartment
 class DepartmentUpdateAPIView(generics.UpdateAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializers
 
-
+#for creating a new doctor object
 class DoctorsCreateAPIView(APIView):
     def post(self, request):
         print(request.data)
@@ -73,7 +77,7 @@ class DoctorsCreateAPIView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-
+# for creating slots by dividing it with the time duration provided by the doctor
 class SlotCreateAPIView(APIView):
     def post(self, request):
         serializer = PostSlotSerializers(data=request.data)
@@ -108,8 +112,8 @@ class SlotCreateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-class viewDoctorRequestView(APIView):
+# for displaying all the requests to the admin
+class ViewDoctorRequestView(APIView):
     def get(self, request, id):
         try:
             doctor = Doctors.objects.get(id=id)  #
@@ -119,16 +123,18 @@ class viewDoctorRequestView(APIView):
             return Response({'msg': 'Doctor not found'})
         except Exception as e:
             return Response({'msg': str(e)})
+        
 
 
+# for displaying approved doctors to the  users
 class UsersDoctorsView(ListAPIView):
     serializer_class = DoctorsSerializers
-    # queryset = Doctors.objects.filter(is_approved=True)
     def get_queryset(self):
         return Doctors.objects.filter(is_approved=True)
     
 
-class getDoctorInHome(APIView):
+# for displaying individual doctor data
+class GetDoctorInHome(APIView):
     def get(self,request, id):
         try:
             doctor = Doctors.objects.get(id=id)
@@ -140,8 +146,8 @@ class getDoctorInHome(APIView):
             return Response({'msg': str(e)})
 
 
-
-class getUser(APIView):
+# for displaying user details
+class GetUser(APIView):
     def get(self,request, id):
         try:
             user = User.objects.get(id=id)
@@ -153,8 +159,7 @@ class getUser(APIView):
             return Response({'msg': str(e)})
 
 
-
-
+# for displaying slots of individual doctors
 class GetSlotsInHome(APIView):
     def get(self,request,id):
         print(id)
@@ -165,7 +170,7 @@ class GetSlotsInHome(APIView):
         return Response(serializer.data)
         
        
-       
+#for creating blogs by doctors 
 class CreateBlogAPIView(APIView):
     def post(self,request):
         print(request.data)
@@ -177,6 +182,7 @@ class CreateBlogAPIView(APIView):
             return Response( status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+#for getting blog corresponding to a doctor
 class GetDoctorsBlog(APIView):
     def get(self,request,id):
         print(id)
@@ -185,6 +191,7 @@ class GetDoctorsBlog(APIView):
         return Response(serializer.data)
 
 
+# for displaying individual blogs
 class GetSingleBlog(APIView):
     def get(self,request,id):
         blog = Blogs.objects.get(id=id)
@@ -192,14 +199,15 @@ class GetSingleBlog(APIView):
         return Response(serializer.data)
 
 
-
+#for displaying every blogs 
 class BLogsListView(ListAPIView):
     serializer_class = Blogsserializer
     def get_queryset(self):
         return Blogs.objects.all()
     
-
-class getSingleDocterAPIView(APIView):
+    
+# for geting individual doctors for users
+class GetSingleDocterAPIView(APIView):
     def get(self, request,id):
         try:
             user=User.objects.get(id=id)

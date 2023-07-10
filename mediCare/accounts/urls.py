@@ -9,11 +9,11 @@ urlpatterns = [
     path('', views.getRoutes),
     path('register/',UserRegistration.as_view()),
     path('login/',MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('activate/<uidb64>/<token> ', views.activate, name='activate'),
+    path('activate/<uidb64>/<token> ', views.Activate, name='activate'),
     path('forgot_password/', views.ForgotPasswordView.as_view(), name='forgot_password'),
-    path('resetPassword_validate/<uidb64>/<token>/',views.resetPassword_validate,name='resetPassword_validate'),
+    path('resetPassword_validate/<uidb64>/<token>/',views.ResetPassword_validate,name='resetPassword_validate'),
     path('resetPassword/',views.ResetPasswordView.as_view(), name='reset_password'),
-    path('getSingleUser/<int:id>/',views.getSingleUser.as_view(),name='getDoctorInHome'),
+    path('getSingleUser/<int:id>/',views.GetSingleUser.as_view(),name='getDoctorInHome'),
 
     # admin side
     path('users/',views.UsersListView.as_view(), name='user-list'),

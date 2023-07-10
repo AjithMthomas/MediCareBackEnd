@@ -1,17 +1,4 @@
 from django.shortcuts import render
-from rest_framework.response import Response
-from django.http import HttpResponseRedirect
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view
-from rest_framework.generics import ListAPIView
-
-from .serializers import UserSerializer
-from accounts.models import User
-
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
-
 from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -19,9 +6,25 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from django.http import HttpResponseRedirect
+
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from payment . models import Appointment
 from payment .serializers import Appointmentserializer
 
+from .serializers import UserSerializer
+from accounts.models import User
+
+
+# request to retrieve a list of available routes in an API.
 @api_view(['GET'])
 def getRoutes(request):
     routes = [
@@ -31,6 +34,7 @@ def getRoutes(request):
     return Response(routes)
 
 
+# user registration  and sending activate email
 class UserRegistration(APIView):
      def post(self, request, format=None):
         email = request.data.get('email')
@@ -60,46 +64,44 @@ class UserRegistration(APIView):
         
         return Response({'msg':'Registration Failed'})
     
-    
-@api_view(['GET'])
-def activate(request, uidb64, token):
-    try:
-        # userdata = request.session.get('userdata')
-        # print('userd',userdata)
-        # url = reverse('http://localhost:3000/login')
 
+
+#for activating user  and directing to login page   
+@api_view(['GET'])
+def Activate(request, uidb64, token):
+    try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User._default_manager.get(pk = uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
     if user is not None and default_token_generator.check_token(user, token):
-
         user.is_active = True
         user.save()
         print('saved')
-
         return HttpResponseRedirect('http://localhost:3000/login')
-        # return Response({"msg": "activated"})
         
 
+
+#for obtaining the default token making costomization to it
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
-        # Add custom claims
         token['username'] = user.username
         token['is_staff'] = user.is_staff
         token['is_admin'] = user.is_superadmin 
 
         return token
 
+
+# it will generate  a token and  send as response 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
 
+#for validating email and senting reseting  mail to the user
 class ForgotPasswordView(APIView):
      def post(self, request:Response):
         email = request.data['email']
@@ -122,8 +124,9 @@ class ForgotPasswordView(APIView):
             return Response({"message": "failed to sent msg"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+#for check for the user and directing to password reseting page
 @api_view(['GET'])
-def resetPassword_validate(request, uidb64, token):
+def ResetPassword_validate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User._default_manager.get(pk=uid)
@@ -135,6 +138,8 @@ def resetPassword_validate(request, uidb64, token):
     else:
         return Response({'message':'Forgot password mail sented Success'}) 
 
+
+#for reseting the the password
 class ResetPasswordView(APIView):
     def post(self, request: Response):
         password = request.data['password']
@@ -150,13 +155,15 @@ class ResetPasswordView(APIView):
             return HttpResponseRedirect('http://localhost:3000/ResetPassword')
 
 
+# for getting all the normal users in the platform
 class UsersListView(ListAPIView):
     serializer_class = UserSerializer
-    # get_queryset overridden to customize the queryset.
     def get_queryset(self):
         return User.objects.filter(is_admin=False, is_staff=False, is_superadmin=False)
 
 
+
+# for blocking  a user 
 class BlockUser(APIView):
     def get(self, request, id):
         try:
@@ -173,8 +180,8 @@ class BlockUser(APIView):
         
 
         
-
-class getSingleUser(APIView):
+# for getting the indvidual user and their related data
+class GetSingleUser(APIView):
     def get(self,request, id):
         try:
             user = User.objects.get(id=id)
