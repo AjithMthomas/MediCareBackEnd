@@ -215,15 +215,15 @@ AUTH_USER_MODEL = 'accounts.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-#      "http://localhost:3001",
-#     "https://www.medicarehealth.site",
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+     "http://localhost:3001",
+    "https://www.medicarehealth.site",
    
-#  ]
+ ]
 CORS_ALLOW_ALL_HEADERS = True
 CORS_ALLOW_ALL_METHODS = True
-CORS_ALLOWED_ORIGINS=True
+
 
 # CORS_ALLOW_ALL_ORIGINS = True
 
