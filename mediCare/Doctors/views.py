@@ -147,7 +147,7 @@ class GetDoctorInHome(APIView):
 
 
 # for displaying user details
-class GetUser(APIView):
+class GetUserAPIView(APIView):
     def get(self,request, id):
         try:
             user = User.objects.get(id=id)
@@ -182,6 +182,8 @@ class CreateBlogAPIView(APIView):
             return Response( status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+
 #for getting blog corresponding to a doctor
 class GetDoctorsBlog(APIView):
     def get(self,request,id):
@@ -206,6 +208,7 @@ class BLogsListView(ListAPIView):
         return Blogs.objects.all()
     
     
+
 # for geting individual doctors for users
 class GetSingleDocterAPIView(APIView):
     def get(self, request,id):

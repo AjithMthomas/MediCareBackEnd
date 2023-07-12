@@ -187,7 +187,7 @@ class GetSingleUser(APIView):
             user = User.objects.get(id=id)
             serializer = UserSerializer(user, many=False)
             appointment = Appointment.objects.filter(patient=id)
-            if appointment :
+            if appointment or user :
                 appointment_serializer = Appointmentserializer(appointment,many=True)
                 return Response({'appointment':appointment_serializer.data,'userDetails':serializer.data})
             return Response(serializer.data)

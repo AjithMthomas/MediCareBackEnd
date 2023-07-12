@@ -18,7 +18,7 @@ urlpatterns = [
     # userside
     path('docorsInUserSide/',views.UsersDoctorsView.as_view(),name='docorsInUserSide'),
     path('getDoctorInHome/<int:id>/',views.GetDoctorInHome.as_view(),name='getDoctorInHome'),
-    path('get_user/<int:id>/',views.GetUser.as_view(),name='getUser'),
+    path('get_user/<int:id>/',views.GetUserAPIView.as_view(),name='getUser'),
     path('getSlotsInHome/<int:id>/',views.GetSlotsInHome.as_view(),name='getSlotsInHome'),
     path('getDoctorsBlog/<int:id>/',views.GetDoctorsBlog.as_view(),name='getDoctorsBlog'),
     path('blogsList/',views.BLogsListView.as_view(),name='blogsList'),
